@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TrackIts 🌴</title>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka+One&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --lime:#B5E300;--teal:#00D4B4;--orange:#FF6B2B;--pink:#FF3FA4;
+  --yellow:#FFD600;--purple:#7C3AED;
+  --bg:#0A1628;--bg2:#0f1f38;--bg3:#162847;
+  --card:#1a3050;--card2:#1f3a5f;
+  --text:#F0F9FF;--text2:#94b8d8;
+  --border:rgba(0,212,180,0.25);
+  --r:16px;--rs:10px;
+}
+body{font-family:'Nunito',sans-serif;background:var(--bg);color:var(--text);min-height:100vh;overflow-x:hidden;}
+nav{background:linear-gradient(135deg,#0d1f40,#0f2a4a);border-bottom:2px solid var(--teal);padding:0 20px;position:sticky;top:0;z-index:200;box-shadow:0 4px 24px rgba(0,212,180,0.15);}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;height:62px;gap:10px;}
+.logo{font-family:'Fredoka One',cursive;font-size:28px;background:linear-gradient(135deg,var(--teal),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;cursor:pointer;flex-shrink:0;}
+.nav-tabs{display:flex;gap:3px;flex-wrap:wrap;}
+.nav-tab{padding:7px 14px;border-radius:50px;font-weight:700;font-size:13px;cursor:pointer;border:2px solid transparent;transition:all .2s;color:var(--text2);background:transparent;font-family:'Nunito',sans-serif;}
+.nav-tab:hover{background:var(--bg3);color:var(--text);}
+.nav-tab.active{background:var(--teal);color:#0a1628;}
+.page{display:none;max-width:1200px;margin:0 auto;padding:28px 20px;}
+.btn-pri{background:linear-gradient(135deg,var(--teal),var(--lime));color:#0a1628;font-weight:800;font-size:15px;padding:12px 24px;border-radius:50px;border:none;cursor:pointer;font-family:'Nunito',sans-serif;transition:transform .15s,box-shadow .15s;box-shadow:0 4px 20px rgba(0,212,180,0.4);}
+.btn-pri:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,212,180,0.5);}
+.btn-sec{background:transparent;color:var(--teal);font-weight:800;font-size:15px;padding:12px 24px;border-radius:50px;border:2px solid var(--teal);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;}
+.btn-sec:hover{background:rgba(0,212,180,0.1);}
+.btn-ghost{background:transparent;color:var(--text2);font-weight:700;font-size:12px;padding:6px 13px;border-radius:var(--rs);border:1.5px solid var(--border);cursor:pointer;font-family:'Nunito',sans-serif;transition:all .15s;}
+.btn-ghost:hover{border-color:var(--teal);color:var(--teal);}
+.sec-title{font-family:'Fredoka One',cursive;font-size:26px;margin-bottom:20px;display:flex;align-items:center;gap:10px;}
+.sec-title span{background:linear-gradient(135deg,var(--teal),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:22px;margin-bottom:20px;}
+.flabel{display:block;font-size:11px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;margin-top:14px;}
+.finput{width:100%;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);padding:10px 14px;font-size:14px;color:var(--text);font-family:'Nunito',sans-serif;font-weight:600;outline:none;transition:border-color .15s;}
+.finput:focus{border-color:var(--teal);}
+.finput::placeholder{color:var(--text2);}
+.pref-btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;}
+.pref-btn{padding:7px 14px;border-radius:50px;font-weight:700;font-size:12px;cursor:pointer;border:2px solid var(--border);background:transparent;color:var(--text2);transition:all .15s;font-family:'Nunito',sans-serif;}
+.pref-btn.sel{border-color:var(--teal);background:rgba(0,212,180,0.15);color:var(--teal);}
+
+/* HOME */
+.home-wrap{background:linear-gradient(160deg,#0a1628 0%,#0d2a4a 50%,#0a2238 100%);padding:56px 20px;text-align:center;min-height:calc(100vh - 62px);display:flex;flex-direction:column;align-items:center;justify-content:center;}
+.home-wrap h1{font-family:'Fredoka One',cursive;font-size:clamp(46px,9vw,80px);line-height:1;margin-bottom:12px;background:linear-gradient(135deg,var(--teal),var(--lime),var(--yellow));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.feat-grid{max-width:860px;width:100%;display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:16px;margin-top:12px;}
+.feat-card{background:var(--card);border-radius:var(--r);padding:22px;cursor:pointer;transition:transform .15s,border-color .2s;border:1.5px solid transparent;text-align:left;}
+.feat-card:hover{transform:translateY(-4px);border-color:var(--teal);}
+
+/* STEPS */
+.phone-banner{background:linear-gradient(135deg,rgba(255,107,43,0.18),rgba(255,63,164,0.12));border:2px solid rgba(255,107,43,0.5);border-radius:var(--r);padding:16px 20px;margin-bottom:22px;display:flex;align-items:flex-start;gap:14px;}
+.stats-row{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:12px;margin-bottom:22px;}
+.stat-box{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:15px;text-align:center;}
+.stat-num{font-family:'Fredoka One',cursive;font-size:34px;line-height:1;background:linear-gradient(135deg,var(--teal),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.stat-lbl{font-size:10px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:1px;margin-top:3px;}
+.step-big{text-align:center;margin-bottom:24px;}
+.step-num{font-family:'Fredoka One',cursive;font-size:88px;line-height:1;background:linear-gradient(135deg,var(--teal),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.step-sub{font-size:12px;color:var(--text2);font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-top:2px;}
+.step-btns{display:flex;gap:16px;justify-content:center;margin-bottom:20px;}
+.sbtn{width:80px;height:80px;border-radius:50%;font-size:30px;border:none;cursor:pointer;transition:transform .12s;display:flex;align-items:center;justify-content:center;}
+.sbtn:active{transform:scale(0.87);}
+.sup{background:linear-gradient(135deg,var(--lime),var(--teal));color:#0a1628;box-shadow:0 4px 18px rgba(181,227,0,0.45);}
+.sdown{background:linear-gradient(135deg,var(--orange),var(--pink));color:#fff;box-shadow:0 4px 18px rgba(255,107,43,0.45);}
+.sreset{background:transparent;border:2px solid var(--border);color:var(--text2);padding:8px 22px;border-radius:50px;cursor:pointer;font-weight:700;font-size:13px;display:block;margin:0 auto;transition:all .15s;font-family:'Nunito',sans-serif;}
+.sreset:hover{border-color:var(--orange);color:var(--orange);}
+.step-log{display:flex;flex-direction:column;gap:7px;max-height:230px;overflow-y:auto;margin-top:12px;}
+.log-row{background:var(--bg3);border-radius:var(--rs);padding:9px 13px;display:flex;justify-content:space-between;align-items:center;font-size:13px;font-weight:600;}
+.lu{color:var(--lime);}.ld{color:var(--orange);}.lt{color:var(--text2);font-size:11px;font-weight:400;}
+
+/* TRADE USERS */
+.users-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(290px,1fr));gap:18px;margin-bottom:28px;}
+.ucard{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:20px;position:relative;overflow:hidden;transition:border-color .2s,transform .15s;}
+.ucard:hover{border-color:var(--teal);transform:translateY(-2px);}
+.ucard::before{content:'';position:absolute;top:0;left:0;right:0;height:4px;background:linear-gradient(90deg,var(--teal),var(--lime));}
+.uhead{display:flex;align-items:center;gap:11px;margin-bottom:10px;}
+.uav{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-family:'Fredoka One',cursive;font-size:17px;flex-shrink:0;}
+.uname{font-family:'Fredoka One',cursive;font-size:18px;}
+.umeta{font-size:12px;color:var(--text2);font-weight:700;margin-top:2px;}
+.ubadge{font-size:10px;font-weight:700;padding:2px 8px;border-radius:50px;text-transform:uppercase;letter-spacing:.5px;display:inline-block;margin-top:3px;}
+.bb{background:rgba(124,58,237,.25);color:#a78bfa;border:1px solid rgba(124,58,237,.4);}
+.bc{background:rgba(255,107,43,.2);color:#FF8C55;border:1px solid rgba(255,107,43,.35);}
+.trade-items{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:13px;}
+.ttag{background:var(--bg3);border-radius:7px;padding:3px 9px;font-size:11px;font-weight:700;color:var(--text2);border:1px solid var(--border);}
+.age-warn{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:800;padding:4px 10px;border-radius:50px;margin-bottom:10px;}
+.aw-minor{background:rgba(255,214,0,.18);color:var(--yellow);border:1px solid rgba(255,214,0,.35);}
+.aw-adult{background:rgba(0,212,180,.12);color:var(--teal);border:1px solid rgba(0,212,180,.25);}
+.btn-log-trade{width:100%;background:linear-gradient(135deg,var(--pink),var(--orange));color:#fff;font-family:'Fredoka One',cursive;font-size:21px;padding:13px;border-radius:11px;border:none;cursor:pointer;transition:transform .12s,box-shadow .12s;box-shadow:0 4px 18px rgba(255,63,164,.35);letter-spacing:.5px;}
+.btn-log-trade:hover{transform:translateY(-1px);box-shadow:0 6px 24px rgba(255,63,164,.5);}
+
+/* TRADE LOG */
+.tl-card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:18px;margin-bottom:14px;}
+.tl-top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px;margin-bottom:10px;flex-wrap:wrap;}
+.tl-names{font-family:'Fredoka One',cursive;font-size:17px;color:var(--lime);}
+.tl-items{font-size:12px;color:var(--text2);margin-top:3px;font-weight:600;}
+.tl-items strong{color:var(--text);}
+.tl-status{font-size:10px;font-weight:800;padding:3px 9px;border-radius:50px;text-transform:uppercase;letter-spacing:.5px;flex-shrink:0;}
+.st-p{background:rgba(255,214,0,.15);color:var(--yellow);border:1px solid rgba(255,214,0,.3);}
+.st-a{background:rgba(0,212,180,.15);color:var(--teal);border:1px solid rgba(0,212,180,.3);}
+.st-d{background:rgba(181,227,0,.15);color:var(--lime);border:1px solid rgba(181,227,0,.3);}
+.agreed-row{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:10px;}
+.agreed-box{background:var(--bg2);border-radius:var(--rs);padding:9px 13px;font-size:12px;font-weight:700;color:var(--text2);flex:1;min-width:130px;}
+.agreed-box span{color:var(--text);display:block;margin-top:2px;font-size:13px;}
+.nego-wrap{background:var(--bg3);border-radius:var(--rs);padding:12px;}
+.nego-label{font-size:10px;font-weight:800;color:var(--text2);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px;}
+.nego-msgs{max-height:150px;overflow-y:auto;display:flex;flex-direction:column;gap:6px;margin-bottom:9px;}
+.nego-msg{padding:7px 11px;border-radius:9px;font-size:12px;font-weight:600;max-width:84%;}
+.nm-a{background:rgba(0,212,180,.15);color:var(--teal);align-self:flex-start;}
+.nm-b{background:rgba(181,227,0,.12);color:var(--lime);align-self:flex-end;}
+.nego-row{display:flex;gap:7px;}
+.ni{flex:1;background:var(--bg2);border:1.5px solid var(--border);border-radius:var(--rs);padding:8px 11px;font-size:12px;color:var(--text);font-family:'Nunito',sans-serif;font-weight:600;outline:none;}
+.ni:focus{border-color:var(--teal);}
+.ni::placeholder{color:var(--text2);}
+.nego-send{background:var(--teal);color:#0a1628;border:none;padding:8px 13px;border-radius:var(--rs);font-weight:800;font-size:12px;cursor:pointer;font-family:'Nunito',sans-serif;white-space:nowrap;}
+.nego-actions{display:flex;gap:7px;margin-top:8px;flex-wrap:wrap;}
+
+/* MODAL */
+.modal-bg{display:none;position:fixed;inset:0;background:rgba(5,15,30,.9);z-index:500;align-items:center;justify-content:center;padding:20px;overflow-y:auto;}
+.modal-bg.open{display:flex;}
+.modal{background:var(--card2);border-radius:var(--r);border:2px solid var(--teal);padding:26px;width:100%;max-width:480px;position:relative;box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 40px rgba(0,212,180,.15);max-height:90vh;overflow-y:auto;}
+.modal h2{font-family:'Fredoka One',cursive;font-size:24px;margin-bottom:4px;background:linear-gradient(135deg,var(--teal),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.modal>p{font-size:13px;color:var(--text2);margin-bottom:4px;font-weight:600;}
+.modal-close{position:absolute;top:14px;right:14px;background:var(--bg3);border:none;color:var(--text2);width:30px;height:30px;border-radius:50%;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+.modal-close:hover{color:var(--text);}
+.modal-actions{display:flex;gap:10px;margin-top:16px;}
+.btn-mok{flex:1;background:linear-gradient(135deg,var(--teal),var(--lime));color:#0a1628;font-weight:800;font-size:14px;padding:11px;border-radius:var(--rs);border:none;cursor:pointer;font-family:'Nunito',sans-serif;}
+.btn-mcancel{flex:1;background:transparent;color:var(--text2);font-weight:700;font-size:14px;padding:11px;border-radius:var(--rs);border:2px solid var(--border);cursor:pointer;font-family:'Nunito',sans-serif;}
+
+/* REGISTER */
+.reg-card{background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);padding:28px;max-width:560px;margin:0 auto;}
+.reg-card h2{font-family:'Fredoka One',cursive;font-size:26px;margin-bottom:5px;background:linear-gradient(135deg,var(--teal),var(--lime));-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px;}
+
+.toast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(80px);background:var(--card2);border:1.5px solid var(--teal);border-radius:50px;padding:10px 22px;font-size:14px;font-weight:700;color:var(--text);z-index:1000;opacity:0;transition:transform .3s,opacity .3s;white-space:nowrap;pointer-events:none;}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+::-webkit-scrollbar{width:5px;}
+::-webkit-scrollbar-track{background:var(--bg2);}
+::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px;}
+@media(max-width:560px){
+  .nav-tab{padding:5px 9px;font-size:12px;}
+  .page{padding:18px 12px;}
+  .form-row{grid-template-columns:1fr;}
+  .modal{padding:18px;}
+}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nav-inner">
+    <div class="logo" onclick="goHome()">🌴 TrackIts</div>
+    <div class="nav-tabs">
+      <button class="nav-tab" onclick="showPage('steps')">👟 Steps</button>
+      <button class="nav-tab" onclick="showPage('books')">📚 Books</button>
+      <button class="nav-tab" onclick="showPage('cards')">🃏 FC Cards</button>
+      <button class="nav-tab" onclick="showPage('register')">✨ Join</button>
+    </div>
+  </div>
+</nav>
+
+<!-- HOME -->
+<div id="page-home" class="home-wrap">
+  <h1>TrackIts 🌺</h1>
+  <p style="font-size:17px;color:var(--text2);max-width:480px;margin:0 auto 30px;font-weight:600;">Track your real-life ups &amp; downs, log book and FC card trades, and arrange meetups with your community!</p>
+  <div style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin-bottom:36px;">
+    <button class="btn-pri" onclick="showPage('register')">✨ Join Now</button>
+    <button class="btn-sec" onclick="showPage('books')">📚 Browse Trades</button>
+  </div>
+  <div class="feat-grid">
+    <div class="feat-card" onclick="showPage('steps')" style="border-color:rgba(181,227,0,.3)">
+      <div style="font-size:36px;margin-bottom:9px;">👟</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:19px;color:var(--lime);margin-bottom:4px;">Step Tracker</div>
+      <div style="font-size:12px;color:var(--text2);font-weight:600;">Count real ups &amp; downs on your phone — stairs, escalators, hills</div>
+    </div>
+    <div class="feat-card" onclick="showPage('books')" style="border-color:rgba(0,212,180,.3)">
+      <div style="font-size:36px;margin-bottom:9px;">📚</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:19px;color:var(--teal);margin-bottom:4px;">Book Trades</div>
+      <div style="font-size:12px;color:var(--text2);font-weight:600;">Log trades &amp; negotiate a meetup location and time</div>
+    </div>
+    <div class="feat-card" onclick="showPage('cards')" style="border-color:rgba(255,107,43,.3)">
+      <div style="font-size:36px;margin-bottom:9px;">🃏</div>
+      <div style="font-family:'Fredoka One',cursive;font-size:19px;color:var(--orange);margin-bottom:4px;">FC Card Trades</div>
+      <div style="font-size:12px;color:var(--text2);font-weight:600;">Trade football cards &amp; arrange where and when to meet</div>
+    </div>
+  </div>
+</div>
+
+<!-- STEPS -->
+<div id="page-steps" class="page">
+  <div class="sec-title">👟 <span>Step Tracker</span></div>
+  <div class="phone-banner">
+    <div style="font-size:34px;flex-shrink:0;">📱</div>
+    <div>
+      <div style="font-size:15px;font-weight:800;color:var(--orange);">📵 Phone only — use in real life!</div>
+      <div style="font-size:12px;color:var(--text2);margin-top:4px;font-weight:600;">This tracker counts how many times you physically go up or down — stairs, escalators, hills, ramps. Each button press = one real movement up or down. Only use this while you're actually on the move with your phone!</div>
+    </div>
+  </div>
+  <div class="stats-row">
+    <div class="stat-box"><div class="stat-num" id="st-total">0</div><div class="stat-lbl">Total Moves</div></div>
+    <div class="stat-box"><div class="stat-num" id="st-up">0</div><div class="stat-lbl">Times Up</div></div>
+    <div class="stat-box"><div class="stat-num" id="st-down">0</div><div class="stat-lbl">Times Down</div></div>
+    <div class="stat-box"><div class="stat-num" id="st-sess">0</div><div class="stat-lbl">Sessions</div></div>
+  </div>
+  <div class="card">
+    <div class="step-big">
+      <div class="step-num" id="step-n">0</div>
+      <div class="step-sub">Current Count</div>
+    </div>
+    <div class="step-btns">
+      <button class="sbtn sup" onclick="stepDo('up')">▲</button>
+      <button class="sbtn sdown" onclick="stepDo('down')">▼</button>
+    </div>
+    <button class="sreset" onclick="stepReset()">Reset Session</button>
+  </div>
+  <div class="card">
+    <div style="font-family:'Fredoka One',cursive;font-size:18px;color:var(--text2);margin-bottom:12px;">Session Log</div>
+    <div class="step-log" id="step-log">
+      <div style="text-align:center;color:var(--text2);font-size:13px;padding:18px;">No moves yet — grab your phone and press ▲ or ▼ each time you go up or down!</div>
+    </div>
+  </div>
+</div>
+
+<!-- BOOKS -->
+<div id="page-books" class="page">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <div class="sec-title" style="margin-bottom:0;">📚 <span>Book Traders</span></div>
+    <button class="btn-pri" onclick="showPage('register')" style="padding:9px 18px;font-size:13px;">+ Register</button>
+  </div>
+  <div class="users-grid" id="books-grid"></div>
+  <div>
+    <div class="sec-title">📋 <span>Trade Log</span></div>
+    <div id="books-log"></div>
+  </div>
+</div>
+
+<!-- FC CARDS -->
+<div id="page-cards" class="page">
+  <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;flex-wrap:wrap;gap:10px;">
+    <div class="sec-title" style="margin-bottom:0;">🃏 <span>FC Card Traders</span></div>
+    <button class="btn-pri" onclick="showPage('register')" style="padding:9px 18px;font-size:13px;">+ Register</button>
+  </div>
+  <div class="users-grid" id="cards-grid"></div>
+  <div>
+    <div class="sec-title">📋 <span>Trade Log</span></div>
+    <div id="cards-log"></div>
+  </div>
+</div>
+
+<!-- REGISTER -->
+<div id="page-register" class="page">
+  <div class="reg-card">
+    <h2>Join TrackIts 🌺</h2>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:18px;font-weight:600;">Register with your real name and age — traders need to know if they need permission before arranging a meetup with you!</p>
+    <div class="form-row" style="margin-top:6px;">
+      <div>
+        <label class="flabel" style="margin-top:0;">Your Real Name</label>
+        <input class="finput" id="rn" placeholder="e.g. Damien" />
+      </div>
+      <div>
+        <label class="flabel" style="margin-top:0;">Your Age</label>
+        <input class="finput" id="ra" type="number" min="5" max="99" placeholder="e.g. 14" />
+      </div>
+    </div>
+    <label class="flabel">Your Area / Location</label>
+    <input class="finput" id="rloc" placeholder="e.g. South London, Croydon" />
+    <label class="flabel">Usually Trades</label>
+    <div class="pref-btns" id="rpref">
+      <button class="pref-btn" onclick="togPref(this,'📚 Books')">📚 Books</button>
+      <button class="pref-btn" onclick="togPref(this,'🃏 FC Cards')">🃏 FC Cards</button>
+      <button class="pref-btn" onclick="togPref(this,'📖 Manga')">📖 Manga</button>
+      <button class="pref-btn" onclick="togPref(this,'🏆 Collectibles')">🏆 Collectibles</button>
+    </div>
+    <label class="flabel">What are you offering? (comma separated)</label>
+    <input class="finput" id="ri" placeholder="e.g. Harry Potter Set, Philosopher's Stone 1st Ed" />
+    <button class="btn-pri" style="width:100%;border-radius:var(--rs);font-size:15px;padding:13px;margin-top:18px;" onclick="doRegister()">🌴 Register &amp; Start Trading</button>
+  </div>
+</div>
+
+<!-- LOG TRADE MODAL -->
+<div class="modal-bg" id="m-log">
+  <div class="modal">
+    <button class="modal-close" onclick="closeM('m-log')">✕</button>
+    <h2>📋 Log a Trade</h2>
+    <p id="ml-who" style="margin-bottom:2px;"></p>
+    <label class="flabel" style="margin-top:10px;">Your name</label>
+    <input class="finput" id="ml-myname" placeholder="Your registered name" />
+    <label class="flabel">What you're giving</label>
+    <input class="finput" id="ml-myitem" placeholder="e.g. Philosopher's Stone" />
+    <label class="flabel">What you're getting from them</label>
+    <input class="finput" id="ml-theiritem" placeholder="e.g. Chamber of Secrets" />
+    <label class="flabel">Your suggested meetup location</label>
+    <input class="finput" id="ml-loc" placeholder="e.g. Outside Peckham Library" />
+    <label class="flabel">Your suggested date &amp; time</label>
+    <input class="finput" id="ml-time" placeholder="e.g. Saturday 14th June, 3pm" />
+    <div class="modal-actions">
+      <button class="btn-mok" onclick="submitTrade()">Log Trade 📋</button>
+      <button class="btn-mcancel" onclick="closeM('m-log')">Cancel</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<footer style="background:#060f1e;border-top:2px solid rgba(0,212,180,0.2);padding:24px 20px;text-align:center;">
+  <div style="font-family:Fredoka One,cursive;font-size:13px;color:#94b8d8;margin-bottom:14px;letter-spacing:1px;">ALSO CHECK OUT</div>
+  <div style="display:flex;gap:14px;justify-content:center;flex-wrap:wrap;">
+    <a href="https://cineshare-damo.vercel.app" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(255,63,164,0.15),rgba(255,107,43,0.15));border:1.5px solid rgba(255,63,164,0.4);border-radius:50px;padding:10px 22px;text-decoration:none;color:#F0F9FF;font-weight:800;font-size:14px;font-family:Nunito,sans-serif;">🎬 CineShare</a>
+    <a href="https://heropicks.vercel.app" target="_blank" rel="noopener" style="display:inline-flex;align-items:center;gap:8px;background:linear-gradient(135deg,rgba(0,212,180,0.15),rgba(181,227,0,0.15));border:1.5px solid rgba(0,212,180,0.4);border-radius:50px;padding:10px 22px;text-decoration:none;color:#F0F9FF;font-weight:800;font-size:14px;font-family:Nunito,sans-serif;">🦸 HeroPicks</a>
+  </div>
+  <div style="margin-top:12px;font-size:12px;color:#94b8d8;opacity:.6;">Made with 🌴 by Damien</div>
+</footer>
+
+<script>
+var stepCount=0,stepsUp=0,stepsDown=0,sessions=0,stepLog=[];
+var trades={books:[],cards:[]};
+var curTarget=null,curSec=null;
+var selPrefs=[];
+
+var avColors=[
+  {bg:'rgba(0,212,180,.2)',c:'#00D4B4'},
+  {bg:'rgba(181,227,0,.2)',c:'#B5E300'},
+  {bg:'rgba(255,107,43,.2)',c:'#FF6B2B'},
+  {bg:'rgba(255,63,164,.2)',c:'#FF3FA4'},
+  {bg:'rgba(255,214,0,.2)',c:'#FFD600'},
+  {bg:'rgba(124,58,237,.2)',c:'#a78bfa'},
+  {bg:'rgba(0,200,255,.15)',c:'#00c8ff'},
+  {bg:'rgba(255,200,0,.18)',c:'#ffc800'}
+];
+
+var users={
+  books:[
+    {name:'Damien',age:15,prefs:'📚 Books',items:['Harry Potter Set','The Hobbit','Percy Jackson'],loc:'South London'}
+  ],
+  cards:[
+    {name:'Damien',age:15,prefs:'🃏 FC Cards',items:['Mbappe RC 2022','Haaland Prizm'],loc:'South London'}
+  ]
+};
+
+function goHome(){
+  hideAll();
+  document.getElementById('page-home').style.display='flex';
+  document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active');});
+}
+
+function showPage(p){
+  hideAll();
+  var el=document.getElementById('page-'+p);
+  if(el) el.style.display='block';
+  document.querySelectorAll('.nav-tab').forEach(function(b){b.classList.remove('active');});
+  var map={steps:'Steps',books:'Books',cards:'FC',register:'Join'};
+  document.querySelectorAll('.nav-tab').forEach(function(b){
+    if(map[p]&&b.textContent.includes(map[p])) b.classList.add('active');
+  });
+  if(p==='books') renderPage('books');
+  if(p==='cards') renderPage('cards');
+}
+
+function hideAll(){
+  ['home','steps','books','cards','register'].forEach(function(id){
+    var e=document.getElementById('page-'+id);
+    if(e) e.style.display='none';
+  });
+}
+
+function renderPage(sec){
+  renderUsers(sec);
+  renderTradeLog(sec);
+}
+
+function renderUsers(sec){
+  var grid=document.getElementById(sec+'-grid');
+  grid.innerHTML='';
+  users[sec].forEach(function(u,i){
+    var av=avColors[i%avColors.length];
+    var init=u.name.slice(0,2).toUpperCase();
+    var bc=u.prefs.includes('Books')||u.prefs.includes('Manga')?'bb':'bc';
+    var tags=u.items.map(function(t){return '<span class="ttag">'+t+'</span>';}).join('');
+    var aw=u.age<18
+      ?'<div class="age-warn aw-minor">⚠️ Under 18 — get permission before trading</div>'
+      :'<div class="age-warn aw-adult">✓ Adult trader — no permission needed</div>';
+    var div=document.createElement('div');
+    div.className='ucard';
+    div.innerHTML=
+      '<div class="uhead">'+
+        '<div class="uav" style="background:'+av.bg+';color:'+av.c+'">'+init+'</div>'+
+        '<div>'+
+          '<div class="uname">'+u.name+'</div>'+
+          '<div class="umeta">Age '+u.age+' · 📍 '+u.loc+'</div>'+
+          '<span class="ubadge '+bc+'">'+u.prefs+'</span>'+
+        '</div>'+
+      '</div>'+
+      aw+
+      '<div style="font-size:11px;color:var(--text2);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-bottom:6px;">Trading:</div>'+
+      '<div class="trade-items">'+tags+'</div>'+
+      '<button class="btn-log-trade" onclick="openLogModal(\''+u.name+'\',\''+sec+'\')">📋 Log a Trade</button>';
+    grid.appendChild(div);
+  });
+}
+
+function renderTradeLog(sec){
+  var el=document.getElementById(sec+'-log');
+  if(!trades[sec].length){
+    el.innerHTML='<div style="text-align:center;color:var(--text2);font-size:13px;padding:22px;background:var(--card);border-radius:var(--r);border:1.5px solid var(--border);">No trades logged yet. Click "Log a Trade" on a trader\'s card to get started!</div>';
+    return;
+  }
+  el.innerHTML='';
+  trades[sec].forEach(function(t,idx){
+    var sc=t.status==='done'?'st-d':t.status==='agreed'?'st-a':'st-p';
+    var sl=t.status==='done'?'✅ Completed':t.status==='agreed'?'📍 Location Agreed':'⏳ Negotiating';
+    var msgsHtml=t.msgs.map(function(m){
+      return '<div class="nego-msg '+(m.side==='a'?'nm-a':'nm-b')+'"><strong>'+m.from+':</strong> '+m.text+'</div>';
+    }).join('');
+    if(!msgsHtml) msgsHtml='<div style="font-size:12px;color:var(--text2);text-align:center;padding:10px;">No messages yet — suggest a location and time below!</div>';
+    var agrHtml='';
+    if(t.agreedLoc||t.agreedTime){
+      agrHtml='<div class="agreed-row">'+
+        (t.agreedLoc?'<div class="agreed-box">📍 Agreed Location<span>'+t.agreedLoc+'</span></div>':'')+
+        (t.agreedTime?'<div class="agreed-box">🕐 Agreed Time<span>'+t.agreedTime+'</span></div>':'')+
+      '</div>';
+    }
+    var markBtn=t.status!=='done'
+      ?'<button class="btn-ghost" style="color:var(--lime);border-color:rgba(181,227,0,.3);" onclick="markDone(\''+sec+'\','+idx+')">✅ Mark Completed</button>'
+      :'';
+    var div=document.createElement('div');
+    div.className='tl-card';
+    div.innerHTML=
+      '<div class="tl-top">'+
+        '<div>'+
+          '<div class="tl-names">'+t.userA+' ↔ '+t.userB+'</div>'+
+          '<div class="tl-items"><strong>'+t.userA+'</strong> gives: '+t.itemA+' &nbsp;·&nbsp; <strong>'+t.userB+'</strong> gives: '+t.itemB+'</div>'+
+        '</div>'+
+        '<span class="tl-status '+sc+'">'+sl+'</span>'+
+      '</div>'+
+      agrHtml+
+      '<div class="nego-wrap">'+
+        '<div class="nego-label">💬 Negotiate Location &amp; Time</div>'+
+        '<div class="nego-msgs" id="nm-'+sec+'-'+idx+'">'+msgsHtml+'</div>'+
+        '<div class="nego-row">'+
+          '<input class="ni" id="ni-'+sec+'-'+idx+'" placeholder="Suggest a place, time, or reply..." />'+
+          '<input class="ni" id="nn-'+sec+'-'+idx+'" placeholder="Your name" style="max-width:105px;" />'+
+          '<button class="nego-send" onclick="sendNego(\''+sec+'\','+idx+')">Send</button>'+
+        '</div>'+
+        '<div class="nego-actions">'+
+          '<button class="btn-ghost" onclick="setAgreed(\''+sec+'\','+idx+',\'loc\')">📍 Set Agreed Location</button>'+
+          '<button class="btn-ghost" onclick="setAgreed(\''+sec+'\','+idx+',\'time\')">🕐 Set Agreed Time</button>'+
+          markBtn+
+        '</div>'+
+      '</div>';
+    el.appendChild(div);
+  });
+}
+
+function sendNego(sec,idx){
+  var inp=document.getElementById('ni-'+sec+'-'+idx);
+  var nameInp=document.getElementById('nn-'+sec+'-'+idx);
+  var txt=inp.value.trim();
+  var nm=nameInp.value.trim()||'Someone';
+  if(!txt){showToast('Type a message first!');return;}
+  var side=trades[sec][idx].msgs.length%2===0?'a':'b';
+  trades[sec][idx].msgs.push({from:nm,text:txt,side:side});
+  inp.value='';
+  renderTradeLog(sec);
+  var box=document.getElementById('nm-'+sec+'-'+idx);
+  if(box) box.scrollTop=box.scrollHeight;
+}
+
+function setAgreed(sec,idx,type){
+  var val=prompt(type==='loc'?'Enter the agreed meetup location:':'Enter the agreed date and time:');
+  if(!val||!val.trim()) return;
+  if(type==='loc') trades[sec][idx].agreedLoc=val.trim();
+  else trades[sec][idx].agreedTime=val.trim();
+  trades[sec][idx].status='agreed';
+  renderTradeLog(sec);
+  showToast(type==='loc'?'📍 Meetup location set!':'🕐 Time agreed!');
+}
+
+function markDone(sec,idx){
+  trades[sec][idx].status='done';
+  renderTradeLog(sec);
+  showToast('✅ Trade marked as completed!');
+}
+
+function openLogModal(name,sec){
+  curTarget=name; curSec=sec;
+  document.getElementById('ml-who').textContent='Logging a trade with '+name;
+  ['ml-myname','ml-myitem','ml-theiritem','ml-loc','ml-time'].forEach(function(id){document.getElementById(id).value='';});
+  openM('m-log');
+}
+
+function submitTrade(){
+  var myitem=document.getElementById('ml-myitem').value.trim();
+  var theiritem=document.getElementById('ml-theiritem').value.trim();
+  var myname=document.getElementById('ml-myname').value.trim();
+  var loc=document.getElementById('ml-loc').value.trim();
+  var time=document.getElementById('ml-time').value.trim();
+  if(!myitem||!theiritem||!myname){showToast('Please fill in your name and both items!');return;}
+  var initMsgs=[];
+  if(loc||time){
+    var suggestion=(loc?'Location: '+loc+'. ':'')+( time?'Time: '+time+'.':'');
+    initMsgs.push({from:myname,text:suggestion.trim(),side:'a'});
+  }
+  trades[curSec].push({
+    userA:myname,userB:curTarget,
+    itemA:myitem,itemB:theiritem,
+    msgs:initMsgs,
+    agreedLoc:loc||null,agreedTime:time||null,
+    status:'pending'
+  });
+  closeM('m-log');
+  showToast('📋 Trade logged with '+curTarget+'!');
+  renderTradeLog(curSec);
+}
+
+function stepDo(dir){
+  if(dir==='up'){stepCount++;stepsUp++;}
+  else{stepCount=Math.max(0,stepCount-1);stepsDown++;}
+  if(!stepLog.length) sessions++;
+  var t=new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit',second:'2-digit'});
+  stepLog.unshift({dir:dir,count:stepCount,time:t});
+  if(stepLog.length>60) stepLog.pop();
+  updateSteps();
+}
+
+function stepReset(){
+  if(stepCount>0) sessions++;
+  stepCount=0; updateSteps(); showToast('Session reset!');
+}
+
+function updateSteps(){
+  document.getElementById('step-n').textContent=stepCount;
+  document.getElementById('st-total').textContent=stepsUp+stepsDown;
+  document.getElementById('st-up').textContent=stepsUp;
+  document.getElementById('st-down').textContent=stepsDown;
+  document.getElementById('st-sess').textContent=sessions;
+  var log=document.getElementById('step-log');
+  if(!stepLog.length){
+    log.innerHTML='<div style="text-align:center;color:var(--text2);font-size:13px;padding:18px;">No moves yet — grab your phone and press ▲ or ▼ each time you go up or down!</div>';
+    return;
+  }
+  log.innerHTML=stepLog.slice(0,20).map(function(e){
+    return '<div class="log-row"><span class="'+(e.dir==='up'?'lu':'ld')+'">'+(e.dir==='up'?'▲ Went Up':'▼ Went Down')+'</span><span>Count: <strong>'+e.count+'</strong></span><span class="lt">'+e.time+'</span></div>';
+  }).join('');
+}
+
+function togPref(btn,val){
+  var i=selPrefs.indexOf(val);
+  if(i>-1){selPrefs.splice(i,1);btn.classList.remove('sel');}
+  else{selPrefs.push(val);btn.classList.add('sel');}
+}
+
+function doRegister(){
+  var name=document.getElementById('rn').value.trim();
+  var age=parseInt(document.getElementById('ra').value)||0;
+  var loc=document.getElementById('rloc').value.trim()||'Location TBC';
+  var items=document.getElementById('ri').value.trim();
+  if(!name){showToast('Please enter your name!');return;}
+  if(!age||age<5||age>99){showToast('Please enter a valid age (5–99)!');return;}
+  var prefs=selPrefs.length?selPrefs[0]:'📚 Books';
+  var sec=prefs.includes('Card')?'cards':'books';
+  users[sec].push({
+    name:name,age:age,prefs:prefs,
+    items:items?items.split(',').map(function(s){return s.trim();}):['Open to anything!'],
+    loc:loc
+  });
+  showToast('🎉 Welcome, '+name+'! You\'re now registered!');
+  document.getElementById('rn').value='';
+  document.getElementById('ra').value='';
+  document.getElementById('rloc').value='';
+  document.getElementById('ri').value='';
+  selPrefs=[];
+  document.querySelectorAll('.pref-btn').forEach(function(b){b.classList.remove('sel');});
+  setTimeout(function(){showPage(sec);},1200);
+}
+
+function openM(id){document.getElementById(id).classList.add('open');}
+function closeM(id){document.getElementById(id).classList.remove('open');}
+document.getElementById('m-log').addEventListener('click',function(e){if(e.target===this)closeM('m-log');});
+
+function showToast(msg){
+  var t=document.getElementById('toast');
+  t.textContent=msg;t.classList.add('show');
+  setTimeout(function(){t.classList.remove('show');},2800);
+}
+
+goHome();
+</script>
+</body>
+</html>
